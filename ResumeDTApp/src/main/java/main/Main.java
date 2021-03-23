@@ -5,17 +5,20 @@
  */
 package main;
 
+import com.mycompany.bean.User;
+
 /**
  *
  * @author User
  */
 public class Main extends javax.swing.JFrame {
-
+    User loggedUsr;
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
+        
     }
 
     /**
