@@ -1,26 +1,81 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package main;
 
+import com.mycompany.bean.Country;
+import com.mycompany.bean.Skill;
 import com.mycompany.bean.User;
+import com.mycompany.bean.UserSkill;
+import com.mycompany.resumeapp.Context;
+import com.mycompany.resumeapp.dao.inter.CountryDaoInter;
+import com.mycompany.resumeapp.dao.inter.SkillDaoInter;
+import com.mycompany.resumeapp.dao.inter.UserDaoInter;
+import com.mycompany.resumeapp.dao.inter.UserSkillDaoInter;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author User
- */
 public class Main extends javax.swing.JFrame {
+    private UserSkillDaoInter userSkillDao = Context.instanceUserSkillDao();
+    private SkillDaoInter skillDao = Context.instanceSkillDao();
+    private UserDaoInter userDao = Context.instanceUserDao();
+    private CountryDaoInter countryDao = Context.instanceCountryDao();
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    List<UserSkill> userSkillList;
+   
+    
     User loggedUsr;
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
+        loggedUsr = userDao.getById(1);
+        fillUserComponents();
+        fillSKillTable();
+    }
+   
+    private void fillUserComponents(){
+        txtName.setText(loggedUsr.getName());
+        txtSurname.setText(loggedUsr.getSurname());
+        txtAreaProfile.setText(loggedUsr.getProfileDesc());
+        txtPhone.setText(loggedUsr.getPhone());
+        txtEmail.setText(loggedUsr.getEmail());
+        txtAddress.setText(loggedUsr.getAddress());
+        Date date = loggedUsr.getBirthDate();
+        String birthdateStr = sdf.format(date);
+        txtBirthdate.setText(birthdateStr);
         
+        List<Country> countryList = countryDao.getAllCountries();
+        for(Country country : countryList){
+            cbBirthplace.addItem(country);
+        }
+        List<Country> nationList = countryDao.getAllNationalities();
+        for(Country nationalities : nationList){
+            cbNationality.addItem(nationalities);
+        }
+        List<Skill> listOfSkills = skillDao.getAllSkills();
+        for(Skill skill : listOfSkills){
+            cbSkill.addItem(skill);
+        }
     }
 
+    private void fillSKillTable(){
+        userSkillList = userSkillDao.getAllSkillByUserId(loggedUsr.getId());
+        Vector<Vector> rows = new Vector<>();
+        for(UserSkill s : userSkillList){
+            Vector<Object>  row = new Vector<>();
+            row.add(s.getSkill());
+            row.add(s.getSkillLevel());
+            rows.add(row);
+        }
+        Vector<String> columns = new Vector<>();
+        columns.add("Skill");
+        columns.add("Skill level");
+        DefaultTableModel dftModel = new  DefaultTableModel(rows,columns);
+        tblSkills.setModel(dftModel);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,21 +85,350 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlUserInfo = new javax.swing.JPanel();
+        lblName = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
+        lblSurname = new javax.swing.JLabel();
+        txtSurname = new javax.swing.JTextField();
+        btnSave = new javax.swing.JButton();
+        separator = new javax.swing.JSeparator();
+        tpUserInfo = new javax.swing.JTabbedPane();
+        pnlProfile = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtAreaProfile = new javax.swing.JTextArea();
+        pnlDetails = new javax.swing.JPanel();
+        lblAddress = new javax.swing.JLabel();
+        txtAddress = new javax.swing.JTextField();
+        lblPhone = new javax.swing.JLabel();
+        txtPhone = new javax.swing.JTextField();
+        lblEmail = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JTextField();
+        lblBirthdate = new javax.swing.JLabel();
+        lblBirthplace = new javax.swing.JLabel();
+        cbBirthplace = new javax.swing.JComboBox<>();
+        txtBirthdate = new javax.swing.JTextField();
+        lblNationality = new javax.swing.JLabel();
+        cbNationality = new javax.swing.JComboBox<>();
+        pnlSkills = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblSkills = new javax.swing.JTable();
+        lblSkill = new javax.swing.JLabel();
+        txtSkillName = new javax.swing.JTextField();
+        lblSkillLevel = new javax.swing.JLabel();
+        jSlider1 = new javax.swing.JSlider();
+        cbSkill = new javax.swing.JComboBox<>();
+        btnAdd = new javax.swing.JButton();
+        btnRemove = new javax.swing.JButton();
+        pnlEmploymentHistory = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lblName.setText("Name");
+
+        lblSurname.setText("Surname");
+
+        btnSave.setText("SAVE");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlUserInfoLayout = new javax.swing.GroupLayout(pnlUserInfo);
+        pnlUserInfo.setLayout(pnlUserInfoLayout);
+        pnlUserInfoLayout.setHorizontalGroup(
+            pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlUserInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSurname)
+                    .addComponent(lblName))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlUserInfoLayout.createSequentialGroup()
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSave))
+                    .addComponent(txtSurname, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(59, Short.MAX_VALUE))
+        );
+        pnlUserInfoLayout.setVerticalGroup(
+            pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlUserInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblName)
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSave))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSurname)
+                    .addComponent(txtSurname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+
+        txtAreaProfile.setColumns(20);
+        txtAreaProfile.setRows(5);
+        jScrollPane1.setViewportView(txtAreaProfile);
+
+        javax.swing.GroupLayout pnlProfileLayout = new javax.swing.GroupLayout(pnlProfile);
+        pnlProfile.setLayout(pnlProfileLayout);
+        pnlProfileLayout.setHorizontalGroup(
+            pnlProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
+        );
+        pnlProfileLayout.setVerticalGroup(
+            pnlProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+        );
+
+        tpUserInfo.addTab("Profile", pnlProfile);
+
+        lblAddress.setText("Address");
+
+        lblPhone.setText("Phone");
+
+        lblEmail.setText("Email");
+
+        lblBirthdate.setText("Birthdate");
+
+        lblBirthplace.setText("Birthplace");
+
+        lblNationality.setText("Nationality");
+
+        cbNationality.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbNationalityActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlDetailsLayout = new javax.swing.GroupLayout(pnlDetails);
+        pnlDetails.setLayout(pnlDetailsLayout);
+        pnlDetailsLayout.setHorizontalGroup(
+            pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDetailsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(pnlDetailsLayout.createSequentialGroup()
+                        .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblAddress)
+                            .addComponent(lblPhone)
+                            .addComponent(lblEmail)
+                            .addComponent(lblBirthdate)
+                            .addComponent(lblBirthplace))
+                        .addGap(22, 22, 22)
+                        .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                            .addComponent(txtPhone)
+                            .addComponent(txtEmail)
+                            .addComponent(cbBirthplace, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtBirthdate)))
+                    .addGroup(pnlDetailsLayout.createSequentialGroup()
+                        .addComponent(lblNationality)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbNationality, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(277, Short.MAX_VALUE))
+        );
+        pnlDetailsLayout.setVerticalGroup(
+            pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDetailsLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAddress)
+                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPhone)
+                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEmail)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBirthdate)
+                    .addComponent(txtBirthdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBirthplace)
+                    .addComponent(cbBirthplace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(pnlDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNationality)
+                    .addComponent(cbNationality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(191, Short.MAX_VALUE))
+        );
+
+        tpUserInfo.addTab("Details", pnlDetails);
+
+        tblSkills.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(tblSkills);
+
+        lblSkill.setText("Skill:");
+
+        txtSkillName.setToolTipText("not exist ?");
+
+        lblSkillLevel.setText("Skill Level:");
+
+        jSlider1.setMaximum(10);
+        jSlider1.setMinimum(1);
+        jSlider1.setValue(1);
+
+        btnAdd.setText("+");
+
+        btnRemove.setText("-");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlSkillsLayout = new javax.swing.GroupLayout(pnlSkills);
+        pnlSkills.setLayout(pnlSkillsLayout);
+        pnlSkillsLayout.setHorizontalGroup(
+            pnlSkillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2)
+            .addGroup(pnlSkillsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlSkillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlSkillsLayout.createSequentialGroup()
+                        .addComponent(lblSkill)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbSkill, 0, 121, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtSkillName, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43)
+                        .addComponent(lblSkillLevel)
+                        .addGap(18, 18, 18)
+                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlSkillsLayout.createSequentialGroup()
+                        .addComponent(btnAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemove)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        pnlSkillsLayout.setVerticalGroup(
+            pnlSkillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSkillsLayout.createSequentialGroup()
+                .addGroup(pnlSkillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlSkillsLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(pnlSkillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblSkillLevel)
+                            .addComponent(txtSkillName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbSkill, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblSkill)))
+                    .addGroup(pnlSkillsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(pnlSkillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnRemove))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        txtSkillName.getAccessibleContext().setAccessibleDescription("");
+
+        tpUserInfo.addTab("Skills", pnlSkills);
+
+        javax.swing.GroupLayout pnlEmploymentHistoryLayout = new javax.swing.GroupLayout(pnlEmploymentHistory);
+        pnlEmploymentHistory.setLayout(pnlEmploymentHistoryLayout);
+        pnlEmploymentHistoryLayout.setHorizontalGroup(
+            pnlEmploymentHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 624, Short.MAX_VALUE)
+        );
+        pnlEmploymentHistoryLayout.setVerticalGroup(
+            pnlEmploymentHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 427, Short.MAX_VALUE)
+        );
+
+        tpUserInfo.addTab("Work Experience", pnlEmploymentHistory);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(tpUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(separator, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(tpUserInfo))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        try {
+            // TODO add your handling code here:
+            String name = txtName.getText();
+            String surname = txtSurname.getText();
+            String profileDesc = txtAreaProfile.getText();
+            String phone = txtPhone.getText();
+            String email = txtEmail.getText();
+            String address = txtAddress.getText();
+            String birthdate = txtBirthdate.getText();
+            Date sqlBirthdate = new Date(sdf.parse(birthdate).getTime());
+            Country country = (Country) cbBirthplace.getSelectedItem();
+            Country nationality = (Country) cbNationality.getSelectedItem();
+            
+            loggedUsr.setName(name);
+            loggedUsr.setSurname(surname);
+            loggedUsr.setProfileDesc(profileDesc);
+            loggedUsr.setPhone(phone);
+            loggedUsr.setEmail(email);
+            loggedUsr.setAddress(address);
+            loggedUsr.setBirthDate(sqlBirthdate);
+            loggedUsr.setBirthplace(country);
+            loggedUsr.setNationality(nationality);
+            
+            userDao.updateUser(loggedUsr);
+           
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void cbNationalityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNationalityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbNationalityActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+         int indexOfSkill = tblSkills.getSelectedRow();
+         UserSkill usrSkill = userSkillList.get(indexOfSkill);
+         userSkillDao.deleteUserSkill(usrSkill.getId());
+         fillSKillTable();
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -82,5 +466,40 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JComboBox<Country> cbBirthplace;
+    private javax.swing.JComboBox<Country> cbNationality;
+    private javax.swing.JComboBox<Skill> cbSkill;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSlider jSlider1;
+    private javax.swing.JLabel lblAddress;
+    private javax.swing.JLabel lblBirthdate;
+    private javax.swing.JLabel lblBirthplace;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblNationality;
+    private javax.swing.JLabel lblPhone;
+    private javax.swing.JLabel lblSkill;
+    private javax.swing.JLabel lblSkillLevel;
+    private javax.swing.JLabel lblSurname;
+    private javax.swing.JPanel pnlDetails;
+    private javax.swing.JPanel pnlEmploymentHistory;
+    private javax.swing.JPanel pnlProfile;
+    private javax.swing.JPanel pnlSkills;
+    private javax.swing.JPanel pnlUserInfo;
+    private javax.swing.JSeparator separator;
+    private javax.swing.JTable tblSkills;
+    private javax.swing.JTabbedPane tpUserInfo;
+    private javax.swing.JTextField txtAddress;
+    private javax.swing.JTextArea txtAreaProfile;
+    private javax.swing.JTextField txtBirthdate;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtPhone;
+    private javax.swing.JTextField txtSkillName;
+    private javax.swing.JTextField txtSurname;
     // End of variables declaration//GEN-END:variables
 }
