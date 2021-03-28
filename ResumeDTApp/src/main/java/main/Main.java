@@ -115,7 +115,7 @@ public class Main extends javax.swing.JFrame {
         lblSkill = new javax.swing.JLabel();
         txtSkillName = new javax.swing.JTextField();
         lblSkillLevel = new javax.swing.JLabel();
-        jSlider1 = new javax.swing.JSlider();
+        skillLevelSlider = new javax.swing.JSlider();
         cbSkill = new javax.swing.JComboBox<>();
         btnAdd = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
@@ -280,11 +280,16 @@ public class Main extends javax.swing.JFrame {
 
         lblSkillLevel.setText("Skill Level:");
 
-        jSlider1.setMaximum(10);
-        jSlider1.setMinimum(1);
-        jSlider1.setValue(1);
+        skillLevelSlider.setMaximum(10);
+        skillLevelSlider.setMinimum(1);
+        skillLevelSlider.setValue(1);
 
         btnAdd.setText("+");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnRemove.setText("-");
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
@@ -310,7 +315,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(43, 43, 43)
                         .addComponent(lblSkillLevel)
                         .addGap(18, 18, 18)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(skillLevelSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlSkillsLayout.createSequentialGroup()
                         .addComponent(btnAdd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -331,7 +336,7 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(lblSkill)))
                     .addGroup(pnlSkillsLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(skillLevelSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(pnlSkillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
@@ -430,6 +435,23 @@ public class Main extends javax.swing.JFrame {
          fillSKillTable();
     }//GEN-LAST:event_btnRemoveActionPerformed
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        String skillName = txtSkillName.getText();
+        Skill skill = null;
+        if(skillName !=null && !skillName.trim().isBlank()){
+            skill = new Skill(0,skillName);
+            skillDao.addSkill(skill);
+        }else{
+            skill = (Skill) cbSkill.getSelectedItem();
+        }
+        
+        int skillLevel = skillLevelSlider.getValue();
+        UserSkill usrSkill = new UserSkill(null,loggedUsr,skill,skillLevel);
+        userSkillDao.insertUserSkill(usrSkill);
+        fillSKillTable();
+    }//GEN-LAST:event_btnAddActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -474,7 +496,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JComboBox<Skill> cbSkill;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JLabel lblAddress;
     private javax.swing.JLabel lblBirthdate;
     private javax.swing.JLabel lblBirthplace;
@@ -491,6 +512,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel pnlSkills;
     private javax.swing.JPanel pnlUserInfo;
     private javax.swing.JSeparator separator;
+    private javax.swing.JSlider skillLevelSlider;
     private javax.swing.JTable tblSkills;
     private javax.swing.JTabbedPane tpUserInfo;
     private javax.swing.JTextField txtAddress;
