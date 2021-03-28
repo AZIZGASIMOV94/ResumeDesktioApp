@@ -476,7 +476,7 @@ public class Main extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-         UserSkill userSkill = userSkillList.get(tblSkills.getSelectedRow());
+        UserSkill selectedUserSkill = userSkillList.get(tblSkills.getSelectedRow());
         String skillName = txtSkillName.getText();
         Skill skill = null;
         if(skillName !=null && !skillName.trim().isBlank()){
@@ -488,9 +488,9 @@ public class Main extends javax.swing.JFrame {
         
         int skillLevel = skillLevelSlider.getValue();
         
-        userSkill.setSkillLevel(skillLevel);
-        userSkill.setSkill(skill);
-        userSkillDao.updateUserSkill(userSkill);
+        selectedUserSkill.setSkillLevel(skillLevel);
+        selectedUserSkill.setSkill(skill);
+        userSkillDao.updateUserSkill(selectedUserSkill);  
         fillSKillTable();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
