@@ -342,6 +342,8 @@
                               <Component id="btnAdd" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnRemove" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnUpdate" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -371,6 +373,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnAdd" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnRemove" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="16" max="32767" attributes="0"/>
                       <Component id="jScrollPane2" min="-2" pref="325" max="-2" attributes="0"/>
@@ -392,6 +395,9 @@
                       <Table columnCount="0" rowCount="4"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="tblSkillsPropertyChange"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -444,6 +450,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnUpdate">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="update"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

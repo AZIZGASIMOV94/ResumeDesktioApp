@@ -119,6 +119,7 @@ public class Main extends javax.swing.JFrame {
         cbSkill = new javax.swing.JComboBox<>();
         btnAdd = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
         pnlEmploymentHistory = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -272,6 +273,11 @@ public class Main extends javax.swing.JFrame {
 
             }
         ));
+        tblSkills.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                tblSkillsPropertyChange(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblSkills);
 
         lblSkill.setText("Skill:");
@@ -298,6 +304,13 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        btnUpdate.setText("update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSkillsLayout = new javax.swing.GroupLayout(pnlSkills);
         pnlSkills.setLayout(pnlSkillsLayout);
         pnlSkillsLayout.setHorizontalGroup(
@@ -320,6 +333,8 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(btnAdd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRemove)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnUpdate)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -340,7 +355,8 @@ public class Main extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlSkillsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
-                    .addComponent(btnRemove))
+                    .addComponent(btnRemove)
+                    .addComponent(btnUpdate))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -452,6 +468,32 @@ public class Main extends javax.swing.JFrame {
         fillSKillTable();
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void tblSkillsPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tblSkillsPropertyChange
+        // TODO add your handling code here:
+       
+        
+    }//GEN-LAST:event_tblSkillsPropertyChange
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+         UserSkill userSkill = userSkillList.get(tblSkills.getSelectedRow());
+        String skillName = txtSkillName.getText();
+        Skill skill = null;
+        if(skillName !=null && !skillName.trim().isBlank()){
+            skill = new Skill(0,skillName);
+            skillDao.addSkill(skill);
+        }else{
+            skill = (Skill) cbSkill.getSelectedItem();
+        }
+        
+        int skillLevel = skillLevelSlider.getValue();
+        
+        userSkill.setSkillLevel(skillLevel);
+        userSkill.setSkill(skill);
+        userSkillDao.updateUserSkill(userSkill);
+        fillSKillTable();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -491,6 +533,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<Country> cbBirthplace;
     private javax.swing.JComboBox<Country> cbNationality;
     private javax.swing.JComboBox<Skill> cbSkill;
